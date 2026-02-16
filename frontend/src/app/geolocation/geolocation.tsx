@@ -18,10 +18,8 @@ const Geolocalizacion: React.FC = () => {
     const [isLoadingMap, setIsLoadingMap] = useState(false);
 
     useEffect(() => {
-        console.log("🔍 Intentando cargar Leaflet...");
         if (typeof window !== 'undefined') {
             import('leaflet').then((leafletModule) => {
-                console.log("✅ Leaflet cargado correctamente", leafletModule);
                 setL(leafletModule.default);
                 
                 delete (leafletModule.default.Icon.Default.prototype as any)._getIconUrl;
@@ -37,7 +35,6 @@ const Geolocalizacion: React.FC = () => {
     }, []);
 
     const ubicacionTextContent = () => {
-        console.log("📍 Solicitando ubicación (texto)...");
         setIsLoadingText(true);
         
         if (!navigator.geolocation) {
@@ -50,7 +47,6 @@ const Geolocalizacion: React.FC = () => {
             (posicion) => {
                 const lat = posicion.coords.latitude;
                 const lon = posicion.coords.longitude;
-                console.log("✅ Ubicación obtenida:", lat, lon);
                 setUbicacionText(`Latitud: ${lat.toFixed(6)}, Longitud: ${lon.toFixed(6)}`);
                 setIsLoadingText(false);
             },
@@ -63,9 +59,6 @@ const Geolocalizacion: React.FC = () => {
     };
 
     const ubicacionLeaflet = () => {
-        console.log("🗺️ Intentando mostrar mapa...");
-        console.log("¿Leaflet cargado?", L !== null);
-        console.log("¿Contenedor existe?", mapContainerRef.current !== null);
         
         setIsLoadingMap(true);
         
@@ -85,7 +78,6 @@ const Geolocalizacion: React.FC = () => {
             (posicion) => {
                 const lat = posicion.coords.latitude;
                 const lon = posicion.coords.longitude;
-                console.log("✅ Ubicación para mapa:", lat, lon);
                 mostrarMapa(lat, lon);
                 setIsLoadingMap(false);
             },
@@ -98,9 +90,6 @@ const Geolocalizacion: React.FC = () => {
     };
 
     const mostrarMapa = (lat: number, lon: number) => {
-        console.log("🎯 Ejecutando mostrarMapa...", lat, lon);
-        console.log("Leaflet disponible:", L);
-        console.log("Contenedor:", mapContainerRef.current);
         
         if (!L || !mapContainerRef.current) {
             console.error("❌ No se puede crear el mapa - falta L o contenedor");
@@ -108,29 +97,22 @@ const Geolocalizacion: React.FC = () => {
         }
 
         if (mapRef.current) {
-            console.log("🧹 Limpiando mapa anterior...");
             mapRef.current.remove();
             mapRef.current = null;
         }
 
         try {
-            console.log("🗺️ Creando mapa...");
             const mapa = L.map(mapContainerRef.current).setView([lat, lon], 15);
             mapRef.current = mapa;
-            console.log("✅ Mapa creado:", mapa);
 
-            console.log("🔲 Añadiendo capa de tiles...");
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
             }).addTo(mapa);
-            console.log("✅ Tiles añadidos");
 
-            console.log("📍 Añadiendo marcador...");
             L.marker([lat, lon])
                 .addTo(mapa)
                 .bindPopup("Tu ubicación actual")
                 .openPopup();
-            console.log("✅ Marcador añadido");
             
         } catch (error) {
             console.error("❌ Error creando el mapa:", error);
@@ -153,7 +135,6 @@ const Geolocalizacion: React.FC = () => {
     useEffect(() => {
         return () => {
             if (mapRef.current) {
-                console.log("🧹 Limpiando mapa al desmontar componente");
                 mapRef.current.remove();
             }
         };
