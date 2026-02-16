@@ -1,0 +1,95 @@
+# Dependencias
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Next.js
+.next/
+out/
+.nxt/
+build/
+
+# React / Vite
+dist/
+dist-ssr/
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Archivos de compilación (Java/otros)
+*.class
+*.jar
+*.war
+*.ear
+target/
+
+# Variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.history/
+
+# Sistemas operativos
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Caché
+.cache/
+.tmp/
+.temp/
+.eslintcache
+.stylelintcache
+
+# Pruebas y cobertura
+coverage/
+.nyc_output/
+jest.config.js
+jest.setup.js
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
+
+# Base de datos
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# Archivos de documentación
+/docs/_build/
+/docs/build/
+/site/
+
+# Configuración local
+config.local.js
+settings.local.json
+*.local.*
