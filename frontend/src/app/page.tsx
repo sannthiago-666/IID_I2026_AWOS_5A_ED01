@@ -1,12 +1,7 @@
-import Geolocalizacion from "./geolocation/geolocation";
-import "./globals.css";
+import Geolocation from "./geolocation/geolocation";
 
 export default function Home() {
   return (
-    
-    <main>
-      <Geolocalizacion />
-    </main>
-    
+    <Geolocation />
   );
 }
