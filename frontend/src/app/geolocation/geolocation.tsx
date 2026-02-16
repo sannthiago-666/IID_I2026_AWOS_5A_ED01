@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MapPin, Loader2 } from "lucide-react"; // Iconos opcionales
 import "leaflet/dist/leaflet.css";
 
 type LeafletMap = any;
@@ -12,6 +14,8 @@ const Geolocalizacion: React.FC = () => {
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const [L, setL] = useState<LeafletModule | null>(null);
     const [ubicacionText, setUbicacionText] = useState<string>("");
+    const [isLoadingText, setIsLoadingText] = useState(false);
+    const [isLoadingMap, setIsLoadingMap] = useState(false);
 
     useEffect(() => {
         console.log("🔍 Intentando cargar Leaflet...");
@@ -34,8 +38,11 @@ const Geolocalizacion: React.FC = () => {
 
     const ubicacionTextContent = () => {
         console.log("📍 Solicitando ubicación (texto)...");
+        setIsLoadingText(true);
+        
         if (!navigator.geolocation) {
             setUbicacionText("Tu navegador no soporta geolocalización.");
+            setIsLoadingText(false);
             return;
         }
 
@@ -45,10 +52,12 @@ const Geolocalizacion: React.FC = () => {
                 const lon = posicion.coords.longitude;
                 console.log("✅ Ubicación obtenida:", lat, lon);
                 setUbicacionText(`Latitud: ${lat.toFixed(6)}, Longitud: ${lon.toFixed(6)}`);
+                setIsLoadingText(false);
             },
             (error) => {
                 console.error("❌ Error obteniendo ubicación:", error);
                 setUbicacionText(getErrorMessage(error));
+                setIsLoadingText(false);
             }
         );
     };
@@ -58,13 +67,17 @@ const Geolocalizacion: React.FC = () => {
         console.log("¿Leaflet cargado?", L !== null);
         console.log("¿Contenedor existe?", mapContainerRef.current !== null);
         
+        setIsLoadingMap(true);
+        
         if (!navigator.geolocation) {
             alert("Tu navegador no soporta geolocalización.");
+            setIsLoadingMap(false);
             return;
         }
 
         if (!L) {
             alert("Leaflet aún no está cargado. Intenta de nuevo.");
+            setIsLoadingMap(false);
             return;
         }
 
@@ -74,10 +87,12 @@ const Geolocalizacion: React.FC = () => {
                 const lon = posicion.coords.longitude;
                 console.log("✅ Ubicación para mapa:", lat, lon);
                 mostrarMapa(lat, lon);
+                setIsLoadingMap(false);
             },
             (error) => {
                 console.error("❌ Error obteniendo ubicación para mapa:", error);
                 alert(getErrorMessage(error));
+                setIsLoadingMap(false);
             }
         );
     };
@@ -92,7 +107,6 @@ const Geolocalizacion: React.FC = () => {
             return;
         }
 
-        // Limpiar mapa existente
         if (mapRef.current) {
             console.log("🧹 Limpiando mapa anterior...");
             mapRef.current.remove();
@@ -146,37 +160,65 @@ const Geolocalizacion: React.FC = () => {
     }, []);
 
     return (
-        <main className="p-8 space-y-8">
-            <div className="space-y-4">
-                <h1 className="text-2xl font-bold">Mi ubicación actual (Texto)</h1>
-                
-                <Button variant="outline" onClick={ubicacionTextContent}>
-                    Mostrar mi ubicación
-                </Button>
+        <main className="container mx-auto p-6 space-y-6 max-w-5xl">
+            {/* Card para ubicación en texto */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5" />
+                        Mi ubicación actual (Texto)
+                    </CardTitle>
+                    <CardDescription>
+                        Obtén tus coordenadas geográficas actuales
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <Button 
+                        variant="outline" 
+                        onClick={ubicacionTextContent}
+                        disabled={isLoadingText}
+                    >
+                        {isLoadingText && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLoadingText ? "Obteniendo ubicación..." : "Mostrar mi ubicación"}
+                    </Button>
 
-                {ubicacionText && (
-                    <p className="text-sm text-gray-700">{ubicacionText}</p>
-                )}
-            </div>
+                    {ubicacionText && (
+                        <div className="p-4 bg-muted rounded-lg">
+                            <p className="text-sm font-mono">{ubicacionText}</p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
 
-            <div className="space-y-4">
-                <h1 className="text-2xl font-bold">Mi ubicación actual (Mapa)</h1>
-                
-                <Button variant="outline" onClick={ubicacionLeaflet}>
-                    Mostrar mi ubicación con Leaflet
-                </Button>
+            {/* Card para mapa */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5" />
+                        Mi ubicación actual (Mapa)
+                    </CardTitle>
+                    <CardDescription>
+                        Visualiza tu ubicación en un mapa interactivo
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <Button 
+                        variant="outline" 
+                        onClick={ubicacionLeaflet}
+                        disabled={isLoadingMap || !L}
+                    >
+                        {isLoadingMap && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLoadingMap ? "Cargando mapa..." : "Mostrar mi ubicación con Leaflet"}
+                    </Button>
 
-                <div 
-                    ref={mapContainerRef}
-                    id="map" 
-                    style={{ 
-                        width: '100%', 
-                        height: '400px',
-                        backgroundColor: '#e0e0e0',
-                        border: '2px solid #333'
-                    }}
-                />
-            </div>
+                    {/* Contenedor del mapa */}
+                    <div 
+                        ref={mapContainerRef}
+                        id="map" 
+                        className="w-full h-100 rounded-lg border border-border overflow-hidden"
+                    />
+                </CardContent>
+            </Card>
         </main>
     );
 };
