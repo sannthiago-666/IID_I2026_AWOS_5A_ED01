@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Loader2 } from "lucide-react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LeafletMap = any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LeafletModule = any;
 
 const MapaLeaflet: React.FC = () => {
@@ -20,6 +22,7 @@ const MapaLeaflet: React.FC = () => {
                 setL(leafletModule.default);
                 
                 // Fix para iconos de Leaflet en Next.js
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 delete (leafletModule.default.Icon.Default.prototype as any)._getIconUrl;
                 leafletModule.default.Icon.Default.mergeOptions({
                     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
