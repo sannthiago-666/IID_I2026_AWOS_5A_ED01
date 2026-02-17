@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Geolocalizacion from "./geolocation/geolocation";
 import MapaLeaflet from "./geolocation/leaflet";
 // import MostrarPuntos from "./geolocation/mostrarPuntos";
@@ -8,7 +9,7 @@ export default function Home() {
         <Geolocalizacion />
         <MapaLeaflet />
         {/* <MostrarPuntos /> */}
-        <img src="/frontend/public/3df5f4d4-5740-4a62-a4da-2b6e7b4e9999.webp"></img>
+        <Image src="/1a32ac7b-0c7b-418f-b9ea-d9ce71282a5f.jpg" alt="description" width={500} height={500} />
     </main>
   );
 }
