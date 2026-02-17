@@ -8,6 +8,7 @@ export default function Home() {
         <Geolocalizacion />
         <MapaLeaflet />
         {/* <MostrarPuntos /> */}
+        <img src="/frontend/public/3df5f4d4-5740-4a62-a4da-2b6e7b4e9999.webp"></img>
     </main>
   );
 }
