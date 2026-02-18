@@ -1,4 +1,6 @@
+import DistanciaPuntos from "./geolocation/distancia";
 import Geolocalizacion from "./geolocation/geolocation";
+import GuardarUbicacion from "./geolocation/guardarUbicacion";
 import MapaLeaflet from "./geolocation/leaflet";
 import MostrarPuntos from "./geolocation/mostrarPuntos";
 
@@ -8,6 +10,8 @@ export default function Home() {
         <Geolocalizacion />
         <MapaLeaflet />
         <MostrarPuntos />
+        <DistanciaPuntos />
+        <GuardarUbicacion />
     </main>
   );
 }
