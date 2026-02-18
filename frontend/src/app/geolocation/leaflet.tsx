@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -5,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Loader2 } from "lucide-react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LeafletMap = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type LeafletModule = any;
 
 const MapaLeaflet: React.FC = () => {
@@ -17,17 +16,16 @@ const MapaLeaflet: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            import('leaflet').then((leafletModule) => {
+        if (typeof window !== "undefined") {
+            import("leaflet").then((leafletModule) => {
                 setL(leafletModule.default);
                 
                 // Fix para iconos de Leaflet en Next.js
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 delete (leafletModule.default.Icon.Default.prototype as any)._getIconUrl;
                 leafletModule.default.Icon.Default.mergeOptions({
-                    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-                    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                    iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+                    iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+                    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
                 });
             }).catch(error => {
                 console.error("Error cargando Leaflet:", error);
@@ -84,7 +82,7 @@ const MapaLeaflet: React.FC = () => {
 
             // Añadir tiles de OpenStreetMap
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(mapa);
 
             // Añadir marcador
